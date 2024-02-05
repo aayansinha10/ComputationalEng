@@ -1,0 +1,14 @@
+X = [-5:0.1:5] % start:step:end
+a = (X).^2
+b = (X).^3
+c = exp(X)
+d = sin(X).*cos(X)
+plot(a,X)
+xlabel('Value');
+ylabel('Function');
+title('Plot of the functions:');
+hold on 
+plot(b,X)
+plot(c,X)
+plot(d,X)
+hold off
