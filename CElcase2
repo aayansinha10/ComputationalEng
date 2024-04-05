@@ -1,0 +1,57 @@
+%% Initial Parameters
+L = 6.0; % Length of the beam (m)
+N = 50; % Number of Nodes
+dx = L / (N - 1); % Grid spacing
+loads = linspace(0, 3000, N); % Our load is varying in a range
+ambient_temps = linspace(9, 100, N); % We do calculation for these different temperatures(°C)
+alpha = 1.0; % Thermal coefficient is needed for thermal contraction in stress calculation
+E = 2.1e11; % Young's modulus for steel (Pa)
+I = 4.3333e-5; % Moment of inertia for a rectangular beam (m^4)
+
+%% Zero Array
+delta = zeros(N, N); % Deflection distribution
+stress = zeros(N, N); % Stress distribution
+
+%% Discretization of problem
+for i = 1:N % Loop over loads
+    for j = 1:N % Loop over temperatures
+        load = loads(i);
+        ambient_temp = ambient_temps(j);
+        
+        % Temperature distribution
+        T_surface = ambient_temp;
+        T = ones(1, N) * ambient_temp;
+        
+        % Boundary conditions for temperature
+        T(1) = T_surface;
+        
+        % Calculate temperature distribution along the beam
+        for k = 2:N
+            T(k) = T(k-1) + (alpha * (T(k-1) - T(k)) / dx^2);
+        end
+        
+        % Beam deflection equation
+        delta(i, j) = load * L^3 / (3 * E * I);
+        
+        % Stress calculation at the midpoint of the beam
+        stress(i, j) = load * L / (2 * I);
+    end
+end
+
+% Plot the 3D surface for stress
+figure;
+surf(ambient_temps, loads, stress);
+xlabel('Ambient Temperature (°C)');
+ylabel('Load (N)');
+zlabel('Stress (Pa)');
+title('Stress vs Ambient Temperature vs Load');
+colorbar;
+
+% Plot the 3D surface for deflection
+figure;
+surf(ambient_temps, loads, delta);
+xlabel('Ambient Temperature (°C)');
+ylabel('Load (N)');
+zlabel('Deflection (m)');
+title('Deflection vs Ambient Temperature vs Load');
+colorbar;
