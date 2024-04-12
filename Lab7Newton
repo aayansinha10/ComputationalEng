@@ -1,0 +1,55 @@
+function new_poly = newtons_poly_interpolation(x, y)
+    n = length(x);
+    b = zeros(n, n);
+    b(:, 1) = y';
+    
+    % Calculate divided differences
+    for j = 2:n
+        for i = j:n
+            b(i, j) = (b(i, j-1) - b(i-1, j-1)) / (x(i) - x(i-j+1));
+        end
+    end
+    
+    % Construct the polynomial
+    syms t;
+    new_poly = b(1, 1);
+    for j = 2:n
+        term = b(j, j);
+        for k = 1:j-1
+            term = term * (t - x(k));
+        end
+        new_poly = new_poly + term;
+    end
+end
+
+
+
+
+% Given data
+x = [1, 2, 2.5, 3, 4, 5];
+y = [0, 5, 7, 6.5, 2, 0];
+% Calculate Newton's polynomial interpolation
+new_poly = newtons_poly_interpolation(x, y);
+
+% Plot interpolation
+plot_interpolation(x, y, new_poly);
+x_interpolation = 3.4;
+y_interpolation = double(subs(new_poly, x_interpolation));
+disp(['For x = 3.4, y = ', num2str(y_interpolation)]);
+
+function plot_interpolation(x, y, new_poly)
+    % Plot original data points
+    scatter(x, y, 'filled');
+    hold on;
+
+    % Plot interpolated polynomial
+    fplot(new_poly, [min(x), max(x)], 'r');
+    
+    % Add labels and legend
+    xlabel('x');
+    ylabel('f(x)');
+    title('Newton''s Polynomial Interpolation');
+    legend('Original data', 'Interpolated polynomial');
+    
+    hold off;
+end
