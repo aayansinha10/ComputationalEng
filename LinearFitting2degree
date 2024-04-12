@@ -1,0 +1,10 @@
+k = [0,2,4,6,9,11,12,15,17,19];
+t = [5,6,7,6,9,8,8,10,12,12];
+p = polyfit(k,t,2);
+scatter(k,t);
+disp(p);
+yp = p(1)*k.^2 + p(2)*k + p(3);
+plot(k, yp,'--', k,t)
+title('x vs y')
+xlabel('x')
+ylabel('y')
