@@ -1,0 +1,13 @@
+x = [0.6,1.5,1.6,2.5,3.5];
+f_x = [0.9036,0.3734,0.3261,0.08422,0.01596];
+h = zeros(1,4);
+for i = 1:1:4
+    h(i) = x(i+1)-x(i)
+    delf (i)= (f_x(i+1)-f_x(i))/h(i)
+end
+df(i) = (-5(exp(-2())))
+plot(x,f_x)
+hold on;
+plot(x,df,'--');
+plot(x,delf,'-o');
+hold off;
