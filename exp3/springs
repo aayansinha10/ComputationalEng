@@ -1,0 +1,15 @@
+% Input all the physical parameters 
+k1 = 50;
+k2 = 100 ;
+k3 = 50 ;
+m1 = 60 ;
+g = 9.81 ;
+m2 = 70 ;
+m3 = 80;
+
+% Convert the system of equations into matrix form A= [(k1+k2) -k2 0; -k2 (k2+k3) -k3; 0-k3 k3];
+A= [(k1+k2),-k2,0; -k2,(k2+k3),-k3; 0,-k3,k3 ]
+B=g*[m1; m2; m3];
+
+X = inv(A) * B; ;
+totalX= [20 40 60] + X
